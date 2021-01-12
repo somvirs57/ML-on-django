@@ -3,7 +3,7 @@ import os
 
 # Create your models here.
 def handwriting_img_path(instance, filename):
-    upload_to = 'Projects/handwriting/user_uploaded'  #.format(str(instance.image).split('.')[0])
+    upload_to = 'user_uploaded'  #.format(str(instance.image).split('.')[0])
     ext = filename.split('.')[-1]
     # get filename
     if instance.image:
