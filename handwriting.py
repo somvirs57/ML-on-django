@@ -21,7 +21,7 @@ from custom_storages import MediaStorage
 
 s3 = boto3.resource('s3', aws_access_key_id=env('AWS_ACCESS_KEY_ID'),
          aws_secret_access_key= env('AWS_SECRET_ACCESS_KEY'))
-bucket = s3.Bucket('codepiepfiles')
+bucket = s3.Bucket('**********')
 
 media_storage = MediaStorage()
 
@@ -36,7 +36,7 @@ def load_keras_model(modeldir):
 
 def get_image_dir(image_name):
     ext = image_name.split('.')[-1]
-    key = 'media/Projects/handwriting/user_uploaded/' + str(image_name)
+    key = 'media/user_uploaded/' + str(image_name)
     imagepath = 'predict_image' + str(randint(1,1000)) + f'.{ext}' #cloudfront
     imagedir = os.path.join(settings.BASE_DIR, imagepath)
     print("image directory is:", imagedir)
@@ -72,12 +72,12 @@ def get_handwritten_words(image_name):
     modeldir = os.path.join(settings.BASE_DIR, 'handwriting_model.h5')
     if not os.path.exists(modeldir):
         with open('handwriting_model.h5', 'wb') as file:
-            bucket.download_fileobj('static/assets/projectfiles/handwriting/handwrite_take2.h5', file)
+            bucket.download_fileobj('/handwrite_take2.h5', file)
     model = load_keras_model(modeldir)
 
     #loading lables from pickle
     with open('label_classes', 'wb') as data:
-        bucket.download_fileobj('static/assets/projectfiles/handwriting/label_classes', data)
+        bucket.download_fileobj('label_classes', data)
 
     with open('label_classes', 'rb') as data:
         labels = pickle.load(data)
@@ -124,7 +124,7 @@ def get_handwritten_words(image_name):
         cv2.putText(image,pred_word, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 2,(255, 0, 0),2,cv2.LINE_AA)
     cv2.imwrite(imagedir, image)
 
-    filepath = 'Projects/handwriting/predicted_images/' + image_path
+    filepath = 'predicted_images/' + image_path
     with open(image_path, 'rb') as f:
         media_storage.save(filepath, f)
     image_url = media_storage.url(filepath)
