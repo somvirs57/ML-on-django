@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>handwriting</title>
+  </head>
+  <body>
+    <h1>This is handwriting page</h1>
+    <form action="{% url 'handwriting_sample' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{handwriting_form.as_p}}
+      <button type="submit" name="button">Submit</button>
+    </form>
+    {% if predicted_image %}
+    <h4>Predicted image is:</h4>
+      <img src="{{predicted_image}}" alt="" width="500"  class="img-fluid">
+    {% endif %}
+    {{labels}}
+  </body>
+</html>
